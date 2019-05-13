@@ -1,0 +1,6 @@
+Major goals: Introduce typeclasses, HOFs, list syntax
+Minor goals:
+1) Major existing typeclasses and what they do: Eq, Ord, Enum, Show, Read
+2) Creating typeclasses
+3) First class functions: Higher order functions, data which store functions, map/filter
+3) A pretty-printer for our lambda interpreter, using custom typeclass to overload
