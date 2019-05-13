@@ -1,0 +1,15 @@
+Major goal: Introduce first-class side effects (monads), do notation
+Minor goals:
+1) Make simple lambda calculus evaluator, run into problem because we can't handle errors
+1) how to do side effects
+    1) problem: impure
+    2) problem: require specific order
+    3) solution: Lift the effect into a _data type_ with a sequencing behavior that requires the output of the previous effect
+    4) forces sequencing, maintains purity!
+2) Useful side effects for our interpreter
+    1) Throwing Errors
+    2) Modify underlying monad to add features:
+    3) State (depth)
+    4) Writer (logging)
+    5) IO (running the interpreter)
+3) IO is special - dangerous, viral
