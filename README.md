@@ -21,3 +21,4 @@ The goal of these series are to offer
     6) The Curry-Howard Correspondence
   
 This repository contains (will contain) planning for the contents of videos, including possibly scripts and prepared code.
+In the future, it may also contain common code that appears in many useful functions (idioms) as the HaskellWiki idioms page only provides some specific solutions to some relatively obscure problems.
