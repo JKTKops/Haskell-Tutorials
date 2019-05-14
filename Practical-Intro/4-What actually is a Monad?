@@ -1,0 +1,15 @@
+Major goals: We've introduced monads in practice, with do notation, but what is going on?
+Minor goals:
+1) The (minimal) monad class declaration
+2) The types of return, >>=, and >>
+3) All monads are functors
+    1) fmap - generalization of map
+    2) <$>, liftM
+4) What if we want to lift a function with more than one argument?
+    1) All monads are also "Applicatives"
+    2) f <$> a1 <*> a2 <*> ... style
+    3) liftA2, liftA3, ... Recommend to not use these or the liftMn equivalents
+5) Why would we prefer monads over imperative code
+    1) More general
+    2) Show generalized functions like forever, twiceM, mapM, until_...
+    2) Define a monad that would be extremely difficult in an imperative setting (probably revstate)
