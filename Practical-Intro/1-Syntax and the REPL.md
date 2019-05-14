@@ -179,7 +179,7 @@ data Bool = True | False
 ```
 
 There are a couple nice features we want these two data types to have. First, we want a way to compare them for equality:
-```
+```Haskell
 eqExpr :: Expr -> Expr -> Bool
 eqExpr (Var name1) (Var name2)             = name1 == name2
 eqExpr (Lit lit1) (Lit lit2)               = lit1  == lit2
@@ -231,8 +231,8 @@ But what do we do here? The first idea is to try Haskell's `if` construct:
 ```Haskell
 absL :: Lit -> Lit
 absL (LInt i) = if i < 0
-               then LInt (negate i)
-               else LInt i
+                then LInt (negate i)
+                else LInt i
 absL lbool = lbool
 ```
 See how we have what looks like a ternary expression in other languages: `if <condition> then <case1> else <case2>`.
@@ -242,15 +242,17 @@ Another option is to use _guards_. Guards are a way to do a second check on a pa
 ```Haskell
 absL :: Lit -> Lit
 absL (LInt i) | i < 0     = LInt (negate i)
-             | otherwise = LInt i
+              | otherwise = LInt i
 absL lbool = lbool
 ```
-But we have some repitition here that we can avoid. We see `LInt i` twice. It would be better if we could tell Haskell
+`otherwise` is a synonym for `True`.
+
+We have some repitition here that we can avoid. We see `LInt i` twice. It would be better if we could tell Haskell
 not to duplicate data we already have:
 ```Haskell
 absL :: Lit -> Lit
 absL prev@(LInt i) | i < 0     = LInt (negate i)
-                  | otherwise = prev
+                   | otherwise = prev
 absL lbool = lbool
 ```
 Of course the compiler can perform this optimization for you, but when working with much larger data types it is much more readable.
@@ -272,11 +274,11 @@ addL _ _ = LBool False
 times4 :: Lit -> Lit
 times4 lit = addL (addL lit lit) (addL lit lit)
 ```
-is tricky to read. We can make it better in either of two ways. The first way is a `let` binding:
+are tricky to read. We can make it better in either of two ways. The first way is a `let` binding:
 ```Haskell
 times4' :: Lit -> Lit
 times4' lit = let times2 = addL lit lit 
-             in addL times2 times2
+              in addL times2 times2
 ```
 The second way is a `where` binding:
 ```Haskell
