@@ -1,4 +1,5 @@
 Primary Goal: All major points of haskell syntax, barring do-notation and language extensions
+
 Minor goals:
 1) Basic function call syntax
     1) prefix form
