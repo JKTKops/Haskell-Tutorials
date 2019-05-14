@@ -2,7 +2,6 @@ Major goal: Introduce tutorial and briefly discuss Haskell
 Minor goals:
 1) Introduce tutorial goals as learning enough haskell to use the language quickly, and learn more later
 2) Introduce Haskell as a lazy pure functional language
-3) Mention the theory series
 
 The goal of this tutorial series is to offer those interested in Haskell a way to learn enough of the language
 to use it competently inhopefully as short as a few hours. In the first few videos of this tutorial, we will build
@@ -29,9 +28,3 @@ this level of abstraction is no barrier to performance. Well-written Haskell cod
 equally as fast. And Haskell's terse and expressive syntax means even optimized code is often shorter and easier to read
 than an imperative equivalent, meaning Haskell code is easier to maintain, and often has fewer bugs. And of course,
 Haskell has strong static typing and powerful type inference.
-
-
-In parallel with this practical tutorial series, I'll be making a series on a more theoretical approach, where I'll aim
-to use Haskell as a way of introducing Category and Type theories. Again, I think these are of general interest
-to those who want to learn Haskell. The theoretical videos will draw on what we do in this series, but nothing
-in the theory videos will be required to follow with this tutorial.
