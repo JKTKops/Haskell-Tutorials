@@ -120,7 +120,7 @@ and patterns are tested top down. So if we try to call factorial of 0, we'll jus
 as you might expect. With just these tools, we have enough to do anything. 
 
 At this point we're ready to start on the tutorial project, a simple interpreter for the lambda calculus.
-I've set this up as a modification of the interpreter Steven Diehl 
+I've set this up as a modification of the interpreter Steven Diehl builds in Chapter 4 of his (incomplete) "Write Yourself a Haskell."
 The lambda calculus is very closely related to Haskell itself. Every statement in lambda calculus is an "expression."
 Expressions can be either variable names, functions, or function applications. We need a way to express this in Haskell:
 ```Haskell
