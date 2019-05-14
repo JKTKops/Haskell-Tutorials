@@ -65,7 +65,7 @@ a real program. For one, we need to be able to define our own functions. Here's 
 square x = x * x
 ```
 Here we say "the function square, applied to an argument x, is the same as x times itself."
-And defining functions of multiple variables looks the same:
+And defining functions of multiple arguments looks the same:
 ```
 add x y = x + y
 ```
