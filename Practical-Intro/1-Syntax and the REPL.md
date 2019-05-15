@@ -1,27 +1,4 @@
-Primary Goal: All major points of haskell syntax, barring do-notation and language extensions
-
-Minor goals:
-1) Basic function call syntax
-    1) prefix form
-    2) multiple arguments
-    3) infix form (backquotes, operators)
-2) Function definition syntax
-    1) Type signatures
-    2) pattern matching, case-of, guards (otherwise), let-in, where, if-then-else
-    3) wildcard: `_`
-    4) Operators
-3) Data declarations
-    1) Distinction between type and value languages
-    2) Deriving Eq, Show, Read, Ord, Enum, Bounded (discussed in depth elsewhere)
-    3) Recursive data types
-4) Revisit function definition with a custom data type (a tree?)
-5) Starting at using the REPL
-    1) Reading error messages
-    2) Loading/reloading source files and importing packages
-    3) :browse, :q, :?
-5) Mention syntactic negation and how to fix corresponding errors
-
-For the first part of this video I'm going to be working inside Haskell's interactive environment,
+For the first part of this section I'd suggest working inside Haskell's interactive environment,
 called GHCi. It's a read-evaluate-print loop like you'd expect from a language like Python or Lisp.
 
 Calling functions is the bread and butter of programming, so let's start there.
@@ -74,6 +51,8 @@ typed language. Where are the types? Haskell's _type inference_ could _infer_ th
 us, and checked that they matched when we called them. I'll come back to reading the types of errors you get when they
 don't match later.
 
+At this point we are switching to real source files. For those unaware, the Haskell source file extension is `.hs`.
+
 When writing real code, we want to put the type signatures into the code, rather than letting the compiler infer them all.
 This helps our code be more readable, and the type of a function will often help show you how to implement the function.
 To specify a type, we use the `::` symbol. Here's a simple function with a type:
@@ -97,7 +76,7 @@ or returned from other functions. In fact, let's look at the type of `(+)`:
 ```
 What is this? What this says is that `(+)` takes an Integer, and evaluates to _another function_. That function
 will then take an integer, and evaluate to an integer. This sort of argument-by-argument evaluation is called
-"currying". Every Haskell function is curried. Therefore you can think of the call to `add` earlier in the video as:
+"currying". Every Haskell function is curried. Therefore you can think of the call to `add` earlier in the section as:
 ```Haskell
 add 5 10
 -- is the same as
@@ -149,10 +128,10 @@ data Expr = Var String
           | App Expr Expr
 ```
 This helps separate the cases visually and make it more apparent where the boundaries are. Much of good Haskell style
-is based on trying to line things up visually where appropriate, while moving noise characters (like `|` here) to the edges.
+is based on trying to line things up visually where appropriate, while moving noise characters (like the `|` here) to the edges.
 
 The other thing we can do is to try and explain what the `String`s being passed to `Var` and `Lam` represent. We can do
-this with a "Type synonym":
+this with a "type synonym":
 ```Haskell
 type Name = String
 data Expr = Var Name
@@ -161,7 +140,7 @@ data Expr = Var Name
 ```
 At this point it's easier to see what the data structure represents. We could build an interpreter on top of this,
 but we probably want special ways to represent some particular values, like ints and booleans. The true lambda
-calculus would represent them as special functions, but we won't go that extreme. All we need to do is add a new
+calculus would represent them as special functions, but we won't go to that extreme. All we need to do is add a new
 data constructor to `Expr`:
 ```Haskell
 data Expr = Var Name
@@ -208,7 +187,7 @@ data Expr = Var Name
 data Lit = LInt Int | LBool Bool deriving Eq
 ```
 This will produce the exact same code, except our functions will both be named `==`.
-We'll talk more about how this overloading works in the next video.
+We'll talk more about how this overloading works in the next section.
 
 We also want a way to convert both types to Strings. Fortunately, there's also a very mechanical way to to do this.
 All we need to do is add `Show` to the deriving clause. The final data declarations look like this:
@@ -221,6 +200,10 @@ data Expr = Var Name
           
 data Lit = LInt Int | LBool Bool deriving (Eq, Show)
 ```
+The function to convert an `Expr` or `Lit` to a string is called `show`. Open your file in GHCi, either by starting
+GHCi with the command `ghci <filename>` or by starting `ghci` and using the command `:l[oad] <filename>`, and give it a shot!
+`Show` functions derived by the compiler are usually not the cleanest. But they work just fine in many cases. In the next
+section we'll talk more about how to make better `show` functions.
 
 One function we might want to define on the `Lit` type does absolute value for LInts:
 ```Haskell
@@ -228,6 +211,10 @@ absL :: Lit -> Lit
 absL (LInt i) = undefined
 absL lbool = lbool
 ```
+`undefined` is a useful standin for when you need a function stub. However if you try and run Haskell code with `undefined` in it,
+if Haskell tries to evaluate the `undefined`, it'll crash. `undefined` has type `a`, so it can stand in for literally anything.
+People also commonly refer to `undefined` as "bottom."
+
 But what do we do here? The first idea is to try Haskell's `if` construct:
 ```Haskell
 absL :: Lit -> Lit
@@ -262,9 +249,16 @@ We can also pattern match on the right hand side of a function definition, using
 ```Haskell
 notL :: Lit -> Lit
 notL lit = case lit of
-    LInt _ -> lit
+    LInt _  -> lit
     LBool b -> LBool (not b)
 ```
+Case statements are extremely common, so use them judiciously. Pattern matching is readable enough on its own, however one
+other common method to improve readability is to try and line up the `->` arrows. Use best judgement; oftentimes this aids readability,
+but not always.
+
+Less commonly, we may want a way to double-check a pattern match in a case. Guards also work inside case statements, because guards
+are a way to double-check _any_ pattern match, not just matches on the left hand side of function definitions.
+
 We can also create local bindings inside functions, which is super helpful for readability.
 These functions:
 ```Haskell
@@ -288,6 +282,9 @@ times4'' lit = addL times2 times2
 ```
 Both of these are easier to read.
 
+`let` and `where` bindings can also perform pattern matches on the left-hand side of equalities, just like function definitions.
+When pattern matches like these are used to pull data out of a datatype, they are often refered to as "destructuring pattern matches" or just "destructuring."
+
 We can also create multiple bindings with both constructs:
 ```Haskell
 calculation1 :: Int -> Int -> Int
@@ -301,8 +298,93 @@ calculation2 x y = sum / diff
         diff = x - y
 ```
 
+I want to end this section by discussing other miscellaneous points that were not easy to fit into the scope of the interpreter at this stage, but which we may see in the next couple of sections. However I consider them extremely important in practical Haskell code.
+
+Firstly, the list type is special. We can imagine that it was declared as something like:
+```Haskell
+data [a] = [] | a : [a]
+```
+This looks quite different from the other datatypes we saw. What's going on here? The `[a]` on the left hand side is basically
+using `[]` as a "circumfix" operator, which goes _around_ its argument. Haskell does not let us make our own circumfix operators!
+This works like a "type-level function;" `[Int]` is a list of `Int`s, `[Bool]` is a list of `Bool`s, `[[Double]]` is a list of lists of `Double`s. On the right hand side, we have either an empty list `[]` or an _infix_ data constructor `:`, read "cons." The `:` operator
+combines a "head" of a list, a single element, with the "tail" or rest of the elements.
+
+Pattern matches on lists look like this:
+```Haskell
+head :: [a] -> a
+head (x:_) = x
+
+tail :: [a] -> [a]
+tail (_:xs) = xs
+```
+(Note that these functions will both cause crashes if the list is empty, because the pattern match will fail).
+This is basically the same as the pattern matching we've seen before; simply the data constructor is an infix operator.
+You can make your own operator data constructors, but they _must_ start with the character `:`.
+
+We also have list literals, exactly as you might expect from Javascript or Python:
+```Haskell
+[1, 2, 3, 4]
+[1 .. 9] -- [1, 2, 3, 4, 5, 6, 7, 8, 9]
+[1, 3 .. 9] -- [1, 3, 5, 7, 9]
+[1 .. ] -- ALL positive integers
+```
+The last example works because Haskell is lazy. If you ask it to print that list, you're in trouble. But if you just use
+it as the source for a computation that only needs, say, 500 of them, then that's no problem. Haskell will only evaluate the list
+as far as it absolutely needs to.
+
+Haskell is a higher order language, and that means our functions can take functions as arguments. Here's an extremely useful function
+on lists, which applies a given function to every element of the list:
+```Haskell
+map :: (a -> b) -> [a] -> [b]
+map _ []     = []
+map f (x:xs) = (f x) : (map f xs)
+```
+Notice the pattern match, the recursion, and the base case. For the sake of demonstration, you can also match particular lists:
+```Haskell
+map :: (a -> b) -> [a] -> [b]
+map _ []     = []
+map f [x]    = [f x]
+map f (x:xs) = (f x) : (map f xs)
+```
+is identical, albiet a bit harder to understand quickly.
+
+Another extremely useful function "filters" a list for elements that satisfy a given boolean-valued predicate:
+```Haskell
+filter :: (a -> Bool) -> [a] -> [a]
+filter _ []     = []
+filter p (x:xs) = if p x 
+                  then x : tail 
+                  else tail
+  where tail = filter p xs
+```
+Here we make use of local binding with `where` to avoid duplicating `filter p xs`.
+
+When working with higher order functions, it can be extremely annoying, tedious, and/or wasteful to have to write a named function
+for every simple functionality. To this end, like any reasonable higher-order language, Haskell provides a syntax for lambda expressions.
+```Haskell
+Prelude> filter (\x -> x <= 5) [0..10]
+[0, 1, 2, 3, 4, 5]
+```
+Here the `\x -> x <= 5` is a function. If you squint _really_ hard, `\` looks like a lambda. We can also write this simple
+function with something called an "operator section," which looks like `(<= 5)`. This is interpreted as exactly the same lambda.
+Similarly, `(5 <=)` would be interpreted as `\x -> 5 <= x`.
+
+One last note is that Haskell supports tuples (and triples etc.). The syntax is exactly as you'd expect:
+```Haskell
+mkTuple :: a -> b -> (a, b)
+mkTuple x y = (x, y)
+
+fst :: (a, b) -> a
+fst (x, _) = x
+
+snd :: (a, b) -> b
+snd (_, y) = y
+```
+`fst` and `snd` get used fairly frequently, so they have very shortened names. You can also see here how to pattern match on tuples
+and declare the type of a tuple.
+
 That's almost all the major points of Haskell's syntax. Let's open this file in GHCi and poke around a bit.
-Start up ghci and type `:l` followed by the filename. To see the help menu for commands, type `:?`.
+Start up ghci and type `:l[oad]` followed by the filename. To see the help menu for commands, type `:?`.
 
 The first thing that is useful when loading a file or package into GHCi is to check what functions are available. We do this
 with the `:browse` command. This lists functions with their types. To see the type of a specific expression, use `:t`:
@@ -357,7 +439,5 @@ There's also a rare error that references "syntactic negation." This comes up be
 `-1`. If you see it, just put parenthesis around it like `(-1)`. In fact, this is a best practice to do anyway, because it's
 easier to distinguish from using `-` as an operator.
 
-I want to end this video by discussing other miscellaneous points that were not easy to fit into the scope of the interpreter at this stage.
-1) list types and pattern matching on lists, list literals, list (stepped, infinite) ranges
-2) examples of higher order functions like `map`, `filter`, and `any`
-3) lambda syntax
+That's all for the first section! With that, we've covered enough of Haskell's syntax and basic ideas to write short programs.
+Give it a whirl!
