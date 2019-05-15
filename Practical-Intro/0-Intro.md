@@ -1,10 +1,5 @@
-Major goal: Introduce tutorial and briefly discuss Haskell
-Minor goals:
-1) Introduce tutorial goals as learning enough haskell to use the language quickly, and learn more later
-2) Introduce Haskell as a lazy pure functional language
-
 The goal of this tutorial series is to offer those interested in Haskell a way to learn enough of the language
-to use it competently inhopefully as short as a few hours. In the first few videos of this tutorial, we will build
+to use it competently in hopefully as short as a few hours. In the first few sections of this tutorial, we will build
 a lambda calculus interpreter just so we have a project to chase. Since Haskell is commonly used in 
 interpreter/compiler design, I hope that this will be of general interest to those who want to learn the language.
 
@@ -13,7 +8,7 @@ better code in general. I'll also show how to use some common Haskell packages a
 I won't cover using Stack as a build tool - that is straight forward enough to find on Stack's tutorial page and 
 I feel that is sufficient.
 
-If you're approaching Haskell for the first time, and you do not know much about it, these videos can still be for you!
+If you're approaching Haskell for the first time, and you do not know much about it, this series can still be for you!
 Haskell is what is known as a "lazy, pure functional language." "Lazy" means the language will wait to compute values 
 until they are actually needed. This requires "purity," which means functions cannot have side effects.
 "Functional" means that functions are values as much as numbers or lists are values. If you have experience with lambda
