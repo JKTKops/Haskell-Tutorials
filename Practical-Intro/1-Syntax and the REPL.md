@@ -437,7 +437,8 @@ which is perfectly legal, even though trying to call it will cause an infinite r
 
 There's also a rare error that references "syntactic negation." This comes up because of the way Haskell treats literals like
 `-1`. If you see it, just put parenthesis around it like `(-1)`. In fact, this is a best practice to do anyway, because it's
-easier to distinguish from using `-` as an operator.
+easier to distinguish from using `-` as an operator. In line with this, don't use `-` in operator sections. When using
+`-`, prefer full lambda expressions to operator sections.
 
 That's all for the first section! With that, we've covered enough of Haskell's syntax and basic ideas to write short programs.
 Give it a whirl!
